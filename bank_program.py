@@ -17,16 +17,17 @@ queue = []
 def customers(arrival_number):
     global queue
 
-    # Este bloco garante que apenas uma thread por vez entre na seção crítica.
-    with semaphore_box:
-        print(f"Cliente de número {arrival_number} está sendo atendido em um dos caixas.\n")
+    # Seção crítica.
+    semaphore_box.acquire()
+    print(f"Cliente de número {arrival_number} está sendo atendido em um dos caixas.\n")
 
-        # Criamos uma variável "service_time" que representa o tempo de atendimento e recebe um inteiro aleatório entre 3 e 10.
-        service_time = random.randint(3, 10)
-        # Em seguida, fazemos a thread esperar, simulando o atendimento.
-        time.sleep(service_time)
-        print(f"Cliente de número {arrival_number} terminou o atendimento em {service_time} segundos.")
-
+    # Criamos uma variável "service_time" que representa o tempo de atendimento e recebe um inteiro aleatório entre 3 e 10.
+    service_time = random.randint(3, 10)
+    # Em seguida, fazemos a thread esperar, simulando o atendimento.
+    time.sleep(service_time)
+    print(f"Cliente de número {arrival_number} terminou o atendimento em {service_time} segundos.")
+    semaphore_box.release()
+    
 # Definimos uma função "generate_customers" que será executada para gerar clientes.
 def generate_customers():
     # Como a fila deve ter um número fixo de 30 clientes em espera, criamos um for de tamanho 31.
